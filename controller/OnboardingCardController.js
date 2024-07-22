@@ -1,9 +1,8 @@
 const OnboardingCardModel = require("../models/OnboardingCardModel");
-const FunnelModel = require("../models/FunnelModel"); 
-const {deleteUserById} = require("../utils/DeleteOnBoardCard");
-const RecommendedCourseModel= require("../models/RecommendedCourseModel")
+const FunnelModel = require("../models/FunnelModel");
+const { deleteUserById } = require("../utils/DeleteOnBoardCard");
+const RecommendedCourseModel = require("../models/RecommendedCourseModel")
 const SessionCardModel = require("../models/SessionCardModel")
-const  RecommendedCourseModel= require("../models/RecommendedCourseModel")
 // Get request method API
 async function handleGetAllUsers(req, res) {
     try {
@@ -91,17 +90,17 @@ async function handleCreateUser(req, res) {
                 session.OnboardingOptionId.push(newCard.OnboardingOptions[index]._id)
                 await session.save();
 
-        
+
                 // Update OnboardingOptions with the newly created RecommendedCourseModel ID
                 newCard.OnboardingOptions[index].RecommendedCourseModelId = recommendedCourse._id;
             }
         }));
-        
+
         // Save the updated OnboardingCard
         await newCard.save();
-        
-        
-        
+
+
+
         funnel.OnboardingCards.push(newCard._id);
         await funnel.save();
         return res.status(200).json({ status: "Successfully added to the card schema and funnel", newCard });
@@ -117,7 +116,7 @@ async function handleUpdateUserById(req, res) {
     try {
         const changes = req.body;
         const updatedUser = await OnboardingCardModel.findByIdAndUpdate(req.params._id, changes, { new: true });
-        
+
         if (!updatedUser) {
             return res.status(404).json({ status: "User not found" });
         }
@@ -130,20 +129,6 @@ async function handleUpdateUserById(req, res) {
 
 // Delete user
 async function handleDeleteUserById(req, res) {
-
-    const cardData = await OnboardingCardModel.findById(req.params.id);
-    const deletedUser = deleteUserById(OnboardingCardModel ,req.params.id)
-    await FunnelModel.findByIdAndUpdate(cardData.FunnelId, {
-        $pull: { OnboardingCards: req.params.id }
-    });
-    
-    if(deletedUser){
-        return res.json({ status: "Success" });
-    }else{
-        return res.status(404).json({ error: "User not found" });
-    }
-}
-
     try {
         // Find the onboarding card by ID
         const cardData = await OnboardingCardModel.findById(req.params.id);
