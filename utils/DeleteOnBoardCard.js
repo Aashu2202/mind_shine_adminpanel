@@ -1,5 +1,3 @@
-const FunnelModel = require("../models/FunnelModel");
-
 async function deleteUserById(model ,id) {
     try {
         const deletedUser = await model.findByIdAndDelete(id);
