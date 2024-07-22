@@ -1,6 +1,7 @@
 const OnboardingCardModel = require("../models/OnboardingCardModel");
 const FunnelModel = require("../models/FunnelModel");
 const { deleteUserById } = require("../utils/DeleteOnBoardCard");
+const { deleteRecommendedCourseModels } = require("../utils/DeleteRecommendedCard");
 const RecommendedCourseModel = require("../models/RecommendedCourseModel")
 const SessionCardModel = require("../models/SessionCardModel")
 // Get request method API
@@ -146,9 +147,7 @@ async function handleDeleteUserById(req, res) {
         }
 
         // Delete all related recommended course cards
-        await RecommendedCourseModel.deleteMany({
-            _id: { $in: recommendedCourseModelIds }
-        });
+        await deleteRecommendedCourseModels(recommendedCourseModelIds);
 
         // Update the funnel to remove the deleted card ID
         await FunnelModel.findByIdAndUpdate(cardData.FunnelId, {
@@ -161,6 +160,7 @@ async function handleDeleteUserById(req, res) {
         return res.status(500).json({ error: "Something went wrong" });
     }
 }
+
 
 
 module.exports = {

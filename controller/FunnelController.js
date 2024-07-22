@@ -1,6 +1,7 @@
 const FunnelModel = require("../models/FunnelModel");
 const OnboardingCardModel = require("../models/OnboardingCardModel");
 const {deleteUserById} = require("../utils/DeleteOnBoardCard");
+const {deleteRecommendedCourseModels} = require("../utils/DeleteRecommendedCard");
 // Get request method API
 async function handleGetAllUsers(req, res) {
     try {
@@ -57,20 +58,41 @@ async function handleUpdateUserById(req, res) {
 // Delete user
 async function handleDeleteUserById(req, res) {
     try {
-        const cardData = await FunnelModel.findById(req.params.id);
-        cardData.OnboardingCards.forEach(async (card) => {
-            await deleteUserById(OnboardingCardModel ,card._id);
-        })
-        const deletedUser = await FunnelModel.findByIdAndDelete(req.params.id);
-        if (!deletedUser) {
-            return res.status(404).json({ error: "User not found" });
+        // Find the funnel by ID
+        const funnel = await FunnelModel.findById(req.params.id);
+        if (!funnel) {
+            return res.status(404).json({ error: "Funnel not found" });
         }
+
+        // Iterate through each OnboardingCard in the funnel
+        for (const cardId of funnel.OnboardingCards) {
+            // Find the onboarding card by ID
+            const cardData = await OnboardingCardModel.findById(cardId);
+            if (cardData) {
+                // Collect all RecommendedCourseModelIds from OnboardingOptions
+                const recommendedCourseModelIds = cardData.OnboardingOptions.map(option => option.RecommendedCourseModelId);
+                
+                // Delete the onboarding card
+                await deleteUserById(OnboardingCardModel, cardId);
+                
+                // Delete all related recommended course cards
+                await deleteRecommendedCourseModels(recommendedCourseModelIds);
+            }
+        }
+
+        // Delete the funnel
+        const deletedFunnel = await FunnelModel.findByIdAndDelete(req.params.id);
+        if (!deletedFunnel) {
+            return res.status(404).json({ error: "Funnel not found" });
+        }
+
         return res.json({ status: "Success" });
     } catch (error) {
-        console.error("Error deleting user:", error);
-        return res.status(500).json({ error: "Error deleting user" });
+        console.error("Error deleting funnel:", error);
+        return res.status(500).json({ error: "Error deleting funnel" });
     }
 }
+
 
 module.exports = {
     handleGetAllUsers,
