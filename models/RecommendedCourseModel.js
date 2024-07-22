@@ -11,7 +11,8 @@ const RecommendedCourseSchema = new mongoose.Schema({
         require : true
     },
     RecommendedCourseId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "OnboardingCard",
         required: true,
     },
 });

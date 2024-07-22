@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const express = require("express");
 const FunnelRouter = require("./Router/OnboardFunnelRouter");
 const onboardrouter = require("./Router/OnboardingCardRouter");
+
+const sessionRouter = require("./Router/SessionRouter")
+
 const userrouter = require("./Router/UsersRouter");
 const app = express();
 const PORT = 8003;
@@ -19,6 +22,9 @@ mongoose.connect("mongodb://localhost:27017/mindSh_demo")
 
 app.use("/api", FunnelRouter);
 app.use("/api/onboard", onboardrouter);
+
+app.use("/api/session", sessionRouter);
+
 app.use("/api/users", userrouter);
 
 app.listen(PORT, () => {

@@ -1,6 +1,8 @@
 const OnboardingCardModel = require("../models/OnboardingCardModel");
 const FunnelModel = require("../models/FunnelModel"); 
 const {deleteUserById} = require("../utils/DeleteOnBoardCard");
+const RecommendedCourseModel= require("../models/RecommendedCourseModel")
+const SessionCardModel = require("../models/SessionCardModel")
 const  RecommendedCourseModel= require("../models/RecommendedCourseModel")
 // Get request method API
 async function handleGetAllUsers(req, res) {
@@ -81,6 +83,14 @@ async function handleCreateUser(req, res) {
                     SelectableAnswer: option.AnswerOptionTextEn,
                     RecommendedCourseId: option.RecommendedCourseId
                 });
+
+                const session = await SessionCardModel.findById(option.RecommendedCourseId)
+                if (!session) {
+                    return res.status(404).json({ error: "Session not found" });
+                }
+                session.OnboardingOptionId.push(newCard.OnboardingOptions[index]._id)
+                await session.save();
+
         
                 // Update OnboardingOptions with the newly created RecommendedCourseModel ID
                 newCard.OnboardingOptions[index].RecommendedCourseModelId = recommendedCourse._id;
@@ -120,6 +130,20 @@ async function handleUpdateUserById(req, res) {
 
 // Delete user
 async function handleDeleteUserById(req, res) {
+
+    const cardData = await OnboardingCardModel.findById(req.params.id);
+    const deletedUser = deleteUserById(OnboardingCardModel ,req.params.id)
+    await FunnelModel.findByIdAndUpdate(cardData.FunnelId, {
+        $pull: { OnboardingCards: req.params.id }
+    });
+    
+    if(deletedUser){
+        return res.json({ status: "Success" });
+    }else{
+        return res.status(404).json({ error: "User not found" });
+    }
+}
+
     try {
         // Find the onboarding card by ID
         const cardData = await OnboardingCardModel.findById(req.params.id);

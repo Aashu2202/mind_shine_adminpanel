@@ -280,7 +280,9 @@ const OnboardingCardSchema = new mongoose.Schema({
             type: Number,
         },
         RecommendedCourseId: {
-            type: String
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Session",
+            default: null,
         },
         RecommendedCourseModelId: {
             type: mongoose.Schema.Types.ObjectId,
