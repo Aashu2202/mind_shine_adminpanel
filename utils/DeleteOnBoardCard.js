@@ -1,7 +1,7 @@
 async function deleteUserById(model ,id) {
     try {
         const deletedUser = await model.findByIdAndDelete(id);
-
+        
         if (!deletedUser) {
             return 0;
         }
