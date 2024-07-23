@@ -1,17 +1,25 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const OnboardingCardModel = require("./OnboardingCardModel");
 
 const SessionSchema = new mongoose.Schema({
-    OnboardingOptionId: [
+    OnboardingCardDetails: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "OnboardingCard.OnboardingOptions",
-            default: null
-        }
+            OnboardingCardId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "OnboardingCard",
+                default: null
+            },
+            OnboardingOptionId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "OnboardingCard.OnboardingOptions",
+                default: null
+            }
+        },
     ],
     Heading: {
         type: String
     }
-}, {timestamps: true})
+}, { timestamps: true })
 
 const SessionCardModel = mongoose.model("Session", SessionSchema);
 
