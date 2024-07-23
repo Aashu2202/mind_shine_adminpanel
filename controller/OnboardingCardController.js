@@ -88,7 +88,10 @@ async function handleCreateUser(req, res) {
                 if (!session) {
                     return res.status(404).json({ error: "Session not found" });
                 }
-                session.OnboardingOptionId.push(newCard.OnboardingOptions[index]._id)
+                session.OnboardingCardDetails.push({
+                    OnboardingCardId: newCard._id,
+                    OnboardingOptionId: newCard.OnboardingOptions[index]._id
+                })
                 await session.save();
 
 
