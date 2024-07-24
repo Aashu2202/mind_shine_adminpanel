@@ -1,18 +1,12 @@
 const UserModel = require("../models/UsersModel");
 const {deleteUserById} = require("../utils/DeleteOnBoardCard");
+const {getAllDetails} = require("../utils/GetAllData");
 
 
 // Get request method API
 async function handleGetAllUsers(req, res) {
-    try {
-        const allDbUsers = await UserModel.find({});
-        return res.json(allDbUsers);
-    } catch (error) {
-        console.error("Error in GET request:", error);
-        return res.status(500).json({ status: "Something went wrong in GET request" });
-    }
+    getAllDetails(req,res,UserModel);
 }
-
 // Post method API
 async function handleCreateUser(req, res) {
     const {Email, Provider, First_name, Last_name, Password, Password_confirmation, Subscription_plan, Subscription_source, subscription_duration,AdminSubscriptionFlag,PreventAutoSubScriptionVerfify,Tester, AllDetails} = req.body;
