@@ -3,18 +3,12 @@ const FunnelModel = require("../models/FunnelModel");
 const { deleteUserById } = require("../utils/DeleteOnBoardCard");
 const { deleteRecommendedCourseModels } = require("../utils/DeleteRecommendedCard");
 const RecommendedCourseModel = require("../models/RecommendedCourseModel")
-const SessionCardModel = require("../models/SessionCardModel")
+const SessionModel = require("../models/SessionModel")
+const {getAllDetails} = require("../utils/GetAllData");
 // Get request method API
 async function handleGetAllUsers(req, res) {
-    try {
-        const allDbUsers = await OnboardingCardModel.find({});
-        return res.json(allDbUsers);
-    } catch (error) {
-        console.error("Error in GET request:", error);
-        return res.status(500).json({ status: "Something went wrong in GET request" });
-    }
+    getAllDetails(req,res,OnboardingCardModel);
 }
-
 // Post method API
 async function handleCreateUser(req, res) {
     const {
@@ -42,9 +36,11 @@ async function handleCreateUser(req, res) {
         Signup,
         Login,
         OnboardingOptions,
-        FunnelId
+        FunnelId,
     } = req.body;
+
     try {
+        
         const newCard = await OnboardingCardModel.create({
             CardType,
             CardName,
@@ -69,30 +65,30 @@ async function handleCreateUser(req, res) {
             NameScreen,
             Signup,
             Login,
-            OnboardingOptions,
-            FunnelId
+            FunnelId,
+            OnboardingOptions
         });
         const funnel = await FunnelModel.findById(FunnelId);
         if (!funnel) {
             return res.status(404).json({ error: "Funnel not found" });
         }
+
         await Promise.all(OnboardingOptions.map(async (option, index) => {
+            const sessions = await SessionModel.find({
+                TitleEn: option.AnswerOptionTextEn
+            });
+            if (sessions.length > 0) {
+                newCard.OnboardingOptions[index].SessionID = sessions.map(session => session._id);
+            } else {
+                newCard.OnboardingOptions[index].SessionID = null;
+            }
+        
             if (option.RecommendedCourseId) {
                 const recommendedCourse = await RecommendedCourseModel.create({
                     OnboardingCardId: newCard._id,
                     SelectableAnswer: option.AnswerOptionTextEn,
                     RecommendedCourseId: option.RecommendedCourseId
                 });
-
-                const session = await SessionCardModel.findById(option.RecommendedCourseId)
-                if (!session) {
-                    return res.status(404).json({ error: "Session not found" });
-                }
-                session.OnboardingCardDetails.push({
-                    OnboardingCardId: newCard._id,
-                    OnboardingOptionId: newCard.OnboardingOptions[index]._id
-                })
-                await session.save();
 
 
                 // Update OnboardingOptions with the newly created RecommendedCourseModel ID
@@ -102,8 +98,6 @@ async function handleCreateUser(req, res) {
 
         // Save the updated OnboardingCard
         await newCard.save();
-
-
 
         funnel.OnboardingCards.push(newCard._id);
         await funnel.save();

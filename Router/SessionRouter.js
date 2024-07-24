@@ -1,9 +1,12 @@
 const express = require("express");
-const {createSession, deleteSession} = require("../controller/SessionController")
+const {handleGetAllUsers, handleCreateUser, handleUpdateUserById, handleDeleteUserById} = require("../controller/SessionController")
 
 const sessionRouter = express.Router()
 
-sessionRouter.post('/', createSession)
-sessionRouter.delete('/:id', deleteSession)
+sessionRouter.get("/", handleGetAllUsers);
+sessionRouter.post("/", handleCreateUser);
+sessionRouter.patch("/:_id", handleUpdateUserById);
+sessionRouter.delete("/:id", handleDeleteUserById);
+
 
 module.exports = sessionRouter

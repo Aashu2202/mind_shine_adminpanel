@@ -1,5 +1,6 @@
 const mongoose = require("mongoose"); 
 const RecommendedCourseModel = require("./RecommendedCourseModel");
+const SessionModel = require("./SessionModel");
 
 const WelcomeSchema = new mongoose.Schema({
     WelcomeScreen_CTAEn: {
@@ -279,9 +280,9 @@ const OnboardingCardSchema = new mongoose.Schema({
         Order: {
             type: Number,
         },
-        RecommendedCourseId: {
+        SessionID: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Session",
+            ref: "SessionModel",
             default: null,
         },
         RecommendedCourseModelId: {

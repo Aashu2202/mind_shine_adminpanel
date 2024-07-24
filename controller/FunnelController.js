@@ -2,15 +2,10 @@ const FunnelModel = require("../models/FunnelModel");
 const OnboardingCardModel = require("../models/OnboardingCardModel");
 const {deleteUserById} = require("../utils/DeleteOnBoardCard");
 const {deleteRecommendedCourseModels} = require("../utils/DeleteRecommendedCard");
+const {getAllDetails} = require("../utils/GetAllData");
 // Get request method API
 async function handleGetAllUsers(req, res) {
-    try {
-        const allDbUsers = await FunnelModel.find({});
-        return res.json(allDbUsers);
-    } catch (error) {
-        console.error("Error in GET request:", error);
-        return res.status(500).json({ status: "Something went wrong in GET request" });
-    }
+    getAllDetails(req,res,FunnelModel);
 }
 
 // Post method API
