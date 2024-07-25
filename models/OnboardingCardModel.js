@@ -1,6 +1,4 @@
 const mongoose = require("mongoose"); 
-const RecommendedCourseModel = require("./RecommendedCourseModel");
-const SessionModel = require("./SessionModel");
 
 const WelcomeSchema = new mongoose.Schema({
     WelcomeScreen_CTAEn: {
@@ -283,6 +281,11 @@ const OnboardingCardSchema = new mongoose.Schema({
         SessionID: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "SessionModel",
+            default: null,
+        },
+        RecommendedCourseId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Session",
             default: null,
         },
         RecommendedCourseModelId: {

@@ -82,7 +82,7 @@ async function handleCreateUser(req, res) {
             } else {
                 newCard.OnboardingOptions[index].SessionID = null;
             }
-        
+            
             if (option.RecommendedCourseId) {
                 const recommendedCourse = await RecommendedCourseModel.create({
                     OnboardingCardId: newCard._id,
@@ -90,7 +90,7 @@ async function handleCreateUser(req, res) {
                     RecommendedCourseId: option.RecommendedCourseId
                 });
 
-
+                
                 // Update OnboardingOptions with the newly created RecommendedCourseModel ID
                 newCard.OnboardingOptions[index].RecommendedCourseModelId = recommendedCourse._id;
             }
