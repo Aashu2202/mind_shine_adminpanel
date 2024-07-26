@@ -116,7 +116,8 @@ const trainingPlanSchema = mongoose.Schema({
     type: Number
   },
   TrainingModulesId: [{
-    type: Number
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "TrainingModuleModel"
   }]
 });
 

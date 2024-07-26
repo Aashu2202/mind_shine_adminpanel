@@ -29,7 +29,8 @@ const trainingModuleSchema = mongoose.Schema({
     }
   ],
   TrainingPlansId: {
-    type: Number
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "TrainingPlanModel"
   }
 });
 
