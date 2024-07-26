@@ -1,5 +1,5 @@
 const UserModel = require("../models/UsersModel");
-const {deleteUserById} = require("../utils/DeleteOnBoardCard");
+const {deleteUserById} = require("../utils/DeleteAllData");
 const {getAllDetails} = require("../utils/GetAllData");
 
 

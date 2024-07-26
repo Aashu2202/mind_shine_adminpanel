@@ -1,6 +1,6 @@
 const OnboardingCardModel = require("../models/OnboardingCardModel");
 const FunnelModel = require("../models/FunnelModel");
-const { deleteUserById } = require("../utils/DeleteOnBoardCard");
+const { deleteUserById } = require("../utils/DeleteAllData");
 const { deleteRecommendedCourseModels } = require("../utils/DeleteRecommendedCard");
 const RecommendedCourseModel = require("../models/RecommendedCourseModel")
 const SessionModel = require("../models/SessionModel")
