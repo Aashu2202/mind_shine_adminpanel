@@ -7,7 +7,8 @@ const onboardrouter = require("./Router/OnboardingCardRouter");
 const sessionRouter = require("./Router/SessionRouter")
 const userrouter = require("./Router/UsersRouter");
 const sessionCardRouter = require("./Router/SessionCardRouter");
-
+const trainingPlanRouter = require("./Router/TrainingPlanRouter");
+const trainingModuleRouter = require("./Router/TrainingModuleRouter");
 
 const app = express();
 const PORT = 8003;
@@ -29,7 +30,8 @@ app.use("/api/onboard", onboardrouter);
 app.use("/api/session", sessionRouter);
 app.use("/api/users", userrouter);
 app.use("/api/sessioncard", sessionCardRouter);
-
+app.use("/api/trainingPlan", trainingPlanRouter);
+app.use("/api/trainingModule", trainingModuleRouter);
 
 app.listen(PORT, () => {
     console.log(`Server started at port ${PORT}`);

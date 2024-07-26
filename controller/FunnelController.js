@@ -1,6 +1,6 @@
 const FunnelModel = require("../models/FunnelModel");
 const OnboardingCardModel = require("../models/OnboardingCardModel");
-const {deleteUserById} = require("../utils/DeleteOnBoardCard");
+const {deleteUserById} = require("../utils/DeleteAllData");
 const {deleteRecommendedCourseModels} = require("../utils/DeleteRecommendedCard");
 const {getAllDetails} = require("../utils/GetAllData");
 // Get request method API

@@ -1,7 +1,7 @@
 const sessionCardModel = require("../models/SessionCardModel");
 const SessionCardModel = require("../models/SessionCardModel");
 const SessionModel = require("../models/SessionModel");
-const { deleteUserById } = require("../utils/DeleteOnBoardCard");
+const { deleteUserById } = require("../utils/DeleteAllData");
 const {getAllDetails} = require("../utils/GetAllData");
 // Get request method API
 async function handleGetAllUsers(req, res) {
